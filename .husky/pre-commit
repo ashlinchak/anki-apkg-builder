@@ -1,0 +1,43 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+lint_staged_files() {
+  echo "⌛ Linting staged files..."
+  npx lint-staged --allow-empty
+  lintResult=$?
+
+  if [ $lintResult -ne 0 ]; then
+    echo "❌ Linting staged files failed"
+    exit 1
+  fi
+}
+
+check_branch_name() {
+  echo "⌛ Checking branch name..."
+  branchName=$(git symbolic-ref --short HEAD)
+  allowedPattern='^((feature|fix|poc)\/[a-zA-Z0-9\-]+)$'
+
+  if ! [[ $branchName =~ $allowedPattern ]]; then
+    echo "❌ Checking branch name failed"
+    exit 1
+  fi
+}
+
+run_tests() {
+  echo "⌛ Running tests..."
+  npm test > /dev/null 2>&1
+  testResult=$?
+
+  if [ $testResult -ne 0 ]; then
+    echo "❌ Running tests failed"
+    exit 1
+  fi
+}
+
+lint_staged_files
+check_branch_name
+run_tests
+
+echo "✅ All checks passed. Committing..."
+
+exit 0
