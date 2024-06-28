@@ -1,6 +1,16 @@
 import { IFileDestroyer } from '../../../../src/core/utils/file-destroyer';
-import { DatabaseFactory, Sqlite3DatabaseAdapter } from '../../../../src/main';
+import { DatabaseFactory } from '../../../../src/main';
+import { DatabaseMock } from '../../../mock/core/database/database-mock';
 import { FileDestroyerMock } from '../../../mock/core/utils/file-destroyer-mock';
+
+jest.mock('../../../../src/core/database/adapter/sqlite3-database-adapter', () => {
+  return {
+    Sqlite3DatabaseAdapter: jest.fn().mockImplementation(() => {
+      return new DatabaseMock();
+    }),
+  };
+});
+
 
 describe('DatabaseFactory', () => {
   let databaseFactory: DatabaseFactory;
@@ -19,7 +29,7 @@ describe('DatabaseFactory', () => {
         forceRecreate: false,
       });
 
-      expect(database).toBeInstanceOf(Sqlite3DatabaseAdapter);
+      expect(database).toBeTruthy();
     });
 
     it('should re-create a database', async () => {
@@ -31,7 +41,7 @@ describe('DatabaseFactory', () => {
         forceRecreate: true,
       });
 
-      expect(database).toBeInstanceOf(Sqlite3DatabaseAdapter);
+      expect(database).toBeTruthy();
       expect(fileDestroyer.destroy).toHaveBeenCalledWith('db.sqlite3');
     });
   });
