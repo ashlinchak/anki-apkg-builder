@@ -1,0 +1,11 @@
+.github/
+.vscode/
+coverage/
+src/
+test/
+.gitignore
+.DS_Store
+.prettierrc
+eslint*
+jest*
+tsconfig*
