@@ -1,11 +1,15 @@
 .github/
+.husky/
 .vscode/
 coverage/
 src/
+tmp/
 test/
 .gitignore
 .DS_Store
 .prettierrc
 eslint*
 jest*
+lint-staged*
+release.config*
 tsconfig*

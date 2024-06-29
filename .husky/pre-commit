@@ -15,7 +15,7 @@ lint_staged_files() {
 check_branch_name() {
   echo "⌛ Checking branch name..."
   branchName=$(git symbolic-ref --short HEAD)
-  allowedPattern='^((feature|fix|poc)\/[a-zA-Z0-9\-]+)$'
+  allowedPattern='^((feature|fix|poc/release)\/[a-zA-Z0-9\-]+)$'
 
   if ! [[ $branchName =~ $allowedPattern ]]; then
     echo "❌ Checking branch name failed"

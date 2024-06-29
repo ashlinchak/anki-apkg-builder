@@ -1,0 +1,61 @@
+name: Create Release PR
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Specify a new version number to be released
+        required: true
+        type: string
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  HUSKY: 0
+
+jobs:
+  create-release-branch:
+    name: Create Release Branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate version
+        id: validate_version
+        run: |
+          VERSION=${{ github.event.inputs.version }}
+          if [[ ! "$VERSION" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Invalid version format: $VERSION"
+            exit 1
+          fi
+          echo "::set-output name=VERSION::$VERSION"
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Create Release Branch
+        id: create_release_branch
+        run: |
+          VERSION=${{ steps.validate_version.outputs.VERSION }}
+          BRANCH_NAME="release/$VERSION"
+          git checkout -b $BRANCH_NAME
+          git push --set-upstream origin $BRANCH_NAME
+          echo "::set-output name=BRANCH_NAME::$BRANCH_NAME"
+
+      - name: Update package.json version
+        run: |
+          VERSION=${{ steps.validate_version.outputs.VERSION }}
+          npm version $VERSION
+          git add package.json
+          git commit -m "[CI]: Update package.json version to $VERSION"
+          git push
+
+      - name: Create Pull Request
+        id: create_pr
+        uses: peter-evans/create-pull-request@v4
+        with:
+          commit-message: "chore(release): ${{ steps.validate_version.outputs.VERSION }}"
+          title: "chore(release): ${{ steps.validate_version.outputs.VERSION }}"
+          body: "chore(release): ${{ steps.validate_version.outputs.VERSION }}"
+          branch: ${{ steps.create_release_branch.outputs.BRANCH_NAME }}
+          reviewers: ${{ github.event.inputs.reviewers }}
