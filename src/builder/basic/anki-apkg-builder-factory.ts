@@ -36,7 +36,7 @@ import { FileReader } from '../../core/utils/fire-reader';
 
 const defaultDbPath = join(tmpdir(), 'collection.anki2');
 
-export type AnkiApkgBuilderFactoryParams = {
+export type AnkiApkgBuilderFactoryConfig = {
   /**
    * Note GUID generator.
    * @default DeckNameAndFieldsNoteGuidGenerator
@@ -49,6 +49,14 @@ export type AnkiApkgBuilderFactoryParams = {
   dbFilePath?: string;
 };
 
+export type CreateAnkiApkgBuilderParams = {
+  /**
+   * Prepare database by creating and seeding it.
+   * @default true
+   */
+  prepareDatabase?: boolean;
+};
+
 export class AnkiApkgBuilderFactory implements IAnkiApkgBuilderFactory {
   private readonly databaseInitializer: IDatabaseInitializer;
   private readonly addDeckCommand: IAddDeckCommand;
@@ -58,8 +66,8 @@ export class AnkiApkgBuilderFactory implements IAnkiApkgBuilderFactory {
   private readonly addCardCommand: IAddCardCommand;
   private readonly saveCommand: IGenerateApkgCommand;
 
-  constructor(params: AnkiApkgBuilderFactoryParams = {}) {
-    const { noteGuidGenerator, dbFilePath = defaultDbPath } = params;
+  constructor(config: AnkiApkgBuilderFactoryConfig = {}) {
+    const { noteGuidGenerator, dbFilePath = defaultDbPath } = config;
 
     const databaseAdapter = this.initDatabaseAdapter(dbFilePath);
     const repository = new Repository(databaseAdapter);
@@ -72,9 +80,14 @@ export class AnkiApkgBuilderFactory implements IAnkiApkgBuilderFactory {
     this.saveCommand = this.initSaveCommand(dbFilePath);
   }
 
-  create(): IAnkiApkgBuilder {
+  async create(params: CreateAnkiApkgBuilderParams = {}): Promise<IAnkiApkgBuilder> {
+    const { prepareDatabase = true } = params;
+
+    if (prepareDatabase) {
+      await this.databaseInitializer.initialize();
+    }
+
     return new AnkiApkgBuilder(
-      this.databaseInitializer,
       this.addDeckCommand,
       this.addPresetCommand,
       this.addNoteTypeCommand,

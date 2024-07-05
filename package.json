@@ -16,11 +16,11 @@
   "author": "Oleksandr Shlinchak",
   "license": "ISC",
   "devDependencies": {
-    "@eslint/js": "9.5.0",
+    "@eslint/js": "9.6.0",
     "@types/adm-zip": "0.5.5",
     "@types/eslint__js": "8.42.3",
     "@types/jest": "29.5.12",
-    "@types/node": "20.14.9",
+    "@types/node": "20.14.10",
     "@types/sqlite3": "3.1.11",
     "eslint": "8.57.0",
     "husky": "9.0.11",
@@ -30,8 +30,8 @@
     "rimraf": "5.0.7",
     "ts-jest": "29.1.5",
     "ts-node": "10.9.2",
-    "typescript": "5.5.2",
-    "typescript-eslint": "7.14.1"
+    "typescript": "5.5.3",
+    "typescript-eslint": "7.15.0"
   },
   "dependencies": {
     "adm-zip": "0.5.14",

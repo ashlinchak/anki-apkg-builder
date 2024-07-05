@@ -13,7 +13,6 @@ import {
   IAddNoteCommand,
   IAddNoteTypeCommand,
   IAddPresetCommand,
-  IDatabaseInitializer,
   IGenerateApkgCommand,
   Media,
   Note,
@@ -26,11 +25,9 @@ import { AddNoteTypeCommandMock } from '../../../mock/builder/basic/command/add-
 import { AddNoteCommandMock } from '../../../mock/builder/basic/command/add-note/add-note-command-mock';
 import { AddPresetCommandMock } from '../../../mock/builder/basic/command/add-preset/add-preset-command-mock';
 import { GenerateApkgCommandMock } from '../../../mock/builder/basic/command/generate-apkg/generate-apkg-command-mock';
-import { DatabaseInitializerMock } from '../../../mock/core/database/database-initializer-mock';
 
 describe('AnkiApkgBuilder', () => {
   let ankiApkgBuilder: AnkiApkgBuilder;
-  let databaseInitializer: IDatabaseInitializer;
   let addDeckCommand: IAddDeckCommand;
   let addPresetCommand: IAddPresetCommand;
   let addNoteTypeCommand: IAddNoteTypeCommand;
@@ -39,7 +36,6 @@ describe('AnkiApkgBuilder', () => {
   let generateApkgCommand: IGenerateApkgCommand;
 
   beforeEach(() => {
-    databaseInitializer = new DatabaseInitializerMock();
     addDeckCommand = new AddDeckCommandMock();
     addPresetCommand = new AddPresetCommandMock();
     addNoteTypeCommand = new AddNoteTypeCommandMock();
@@ -47,7 +43,6 @@ describe('AnkiApkgBuilder', () => {
     addCardCommand = new AddCardCommandMock();
     generateApkgCommand = new GenerateApkgCommandMock();
     ankiApkgBuilder = new AnkiApkgBuilder(
-      databaseInitializer,
       addDeckCommand,
       addPresetCommand,
       addNoteTypeCommand,
@@ -55,8 +50,6 @@ describe('AnkiApkgBuilder', () => {
       addCardCommand,
       generateApkgCommand,
     );
-
-    databaseInitializer.initialize = jest.fn();
   });
 
   describe('addDeck', () => {
@@ -78,7 +71,6 @@ describe('AnkiApkgBuilder', () => {
 
       expect(result).toEqual(deck);
       expect(addDeckCommand.execute).toHaveBeenCalledWith(params);
-      expect(databaseInitializer.initialize).toHaveBeenCalled();
     });
   });
 
@@ -93,7 +85,6 @@ describe('AnkiApkgBuilder', () => {
 
       expect(result).toEqual(preset);
       expect(addPresetCommand.execute).toHaveBeenCalledWith(params);
-      expect(databaseInitializer.initialize).toHaveBeenCalled();
     });
   });
 
@@ -108,7 +99,6 @@ describe('AnkiApkgBuilder', () => {
 
       expect(result).toEqual(noteType);
       expect(addNoteTypeCommand.execute).toHaveBeenCalledWith(params);
-      expect(databaseInitializer.initialize).toHaveBeenCalled();
     });
   });
 
@@ -123,7 +113,6 @@ describe('AnkiApkgBuilder', () => {
 
       expect(result).toEqual(note);
       expect(addNoteCommand.execute).toHaveBeenCalledWith(params);
-      expect(databaseInitializer.initialize).toHaveBeenCalled();
     });
   });
 
@@ -138,7 +127,6 @@ describe('AnkiApkgBuilder', () => {
 
       expect(result).toEqual(card);
       expect(addCardCommand.execute).toHaveBeenCalledWith(params);
-      expect(databaseInitializer.initialize).toHaveBeenCalled();
     });
   });
 
@@ -162,7 +150,6 @@ describe('AnkiApkgBuilder', () => {
         archivePath: apkgPath,
         mediaCollection: expect.any(Map<string, Media>),
       });
-      expect(databaseInitializer.initialize).toHaveBeenCalled();
     });
   });
 });
