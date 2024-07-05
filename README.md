@@ -15,7 +15,8 @@ Generating Anki `apkg` file TypeScript example:
 ```ts
 import { AnkiApkgBuilderFactory } from 'anki-apkg-builder';
 
-const builder = new AnkiApkgBuilderFactory().create();
+const builderFactory = new AnkiApkgBuilderFactory()
+const builder = await builderFactory.create();
 const germanVocabularyDeck = await builder.addDeck({
   name: 'German Vocabulary',
 });

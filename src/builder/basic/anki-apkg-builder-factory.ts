@@ -9,7 +9,7 @@ import { IAnkiApkgBuilder } from '../anki-apkg-builder';
 import { INoteGuidGenerator } from '../typing/note-guid-generator';
 import { Repository, IRepository } from '../../core/database/repository';
 import { DatabaseSeeder } from '../../core/database/seed/database-seeder';
-import { IAnkiApkgBuilderFactory } from '../anki-apkg-builder-factory';
+import { CreateAnkiApkgBuilderParams, IAnkiApkgBuilderFactory } from '../anki-apkg-builder-factory';
 import { ZipServiceFactory } from '../../core/zip/zip-service-factory';
 import { DatabaseFactory } from '../../core/database/database-factory';
 import { FileDestroyer } from '../../core/utils/file-destroyer';
@@ -47,14 +47,6 @@ export type AnkiApkgBuilderFactoryConfig = {
    * @default os.tmpdir() + '/collection.anki2'
    */
   dbFilePath?: string;
-};
-
-export type CreateAnkiApkgBuilderParams = {
-  /**
-   * Prepare database by creating and seeding it.
-   * @default true
-   */
-  prepareDatabase?: boolean;
 };
 
 export class AnkiApkgBuilderFactory implements IAnkiApkgBuilderFactory {
