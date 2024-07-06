@@ -6,7 +6,6 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "clean": "rimraf dist/*",
-    "lint:branch-name": "sh ./script/branch-name-validation.sh",
     "lint:fix": "eslint . --fix",
     "lint": "eslint .",
     "prepare": "husky",
