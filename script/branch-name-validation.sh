@@ -3,7 +3,7 @@
 check_branch_name() {
   echo "⌛ Checking branch name..."
   branchName="$1"
-  allowedPattern='^((feature|fix|release|chore|poc)\/[a-zA-Z0-9\-]+)$'
+  allowedPattern='^((feature|fix|release|chore|poc)\/[a-zA-Z0-9\-\.]+)$'
 
   if ! echo "$branchName" | grep -Eq "$allowedPattern"; then
     echo "❌ Branch name \"$branchName\" is not allowed!"
