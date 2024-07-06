@@ -23,7 +23,8 @@ run_tests() {
   fi
 }
 
-npm run lint:branch-name
+
+sh ./script/branch-name-validation.sh "$(git branch --show-current)"
 
 lint_staged_files
 
