@@ -6,11 +6,11 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "clean": "rimraf dist/*",
-    "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "test": "jest",
+    "lint": "eslint .",
+    "prepare": "husky",
     "test:cov": "jest --coverage",
-    "prepare": "husky"
+    "test": "jest"
   },
   "keywords": [],
   "author": "Oleksandr Shlinchak",
