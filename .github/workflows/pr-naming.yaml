@@ -1,0 +1,15 @@
+name: Restrict PR Branch Names
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  check-branch-name:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run branch name check
+        run: npm run lint:branch-name
